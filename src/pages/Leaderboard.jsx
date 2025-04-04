@@ -11,16 +11,16 @@ function Leaderboard() {
   useEffect(() => {
     fetch(`${API_BASE_URL}/leaderboard`)
       .then((response) => response.json())
-      .then((data) => setLeaderboardData(data))
+      .then((data) => setLeaderboardData(data.leaderboard))
       .catch((error) => console.error('Error fetching leaderboard:', error));
   }, []);
 
-  const chartData = {
-    labels: leaderboardData.map((entry) => entry.address),
+  const chartData = leaderboardData?.length > 0 && {
+    labels: leaderboardData?.map((entry) => entry.creator_address),
     datasets: [
       {
         label: 'Minted Tokens',
-        data: leaderboardData.map((entry) => entry.minted),
+        data: leaderboardData?.map((entry) => entry.mint_count),
         backgroundColor: ['#4caf50', '#2196f3', '#ff9800'],
         borderColor: ['#388e3c', '#1976d2', '#f57c00'],
         borderWidth: 2,
@@ -54,11 +54,11 @@ function Leaderboard() {
             </tr>
           </thead>
           <tbody>
-            {leaderboardData.map((entry, index) => (
+            {leaderboardData?.map((entry, index) => (
               <tr key={index}>
                 <td>{index + 1}</td>
-                <td>{entry.address}</td>
-                <td>{entry.minted}</td>
+                <td>{entry.creator_address}</td>
+                <td>{entry.mint_count}</td>
               </tr>
             ))}
           </tbody>

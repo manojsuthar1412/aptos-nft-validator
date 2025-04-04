@@ -7,6 +7,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@aptos-labs/ts-sdk": "^1.38.0",
+    "@aptos-labs/wallet-adapter-react": "^5.0.1",
     "chart.js": "^4.4.8",
     "framer-motion": "^12.6.3",
     "react": "^19.1.0",

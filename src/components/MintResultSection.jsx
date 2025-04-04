@@ -3,7 +3,7 @@ import React from 'react';
 function MintResultSection({ mintResult }) {
   return (
     <section className="mint-result-section">
-      {mintResult.success ? (
+      {mintResult?.status == 'success' ? (
         <>
           <p>Minting Successful!</p>
           <p>Transaction Hash: {mintResult.txHash}</p>

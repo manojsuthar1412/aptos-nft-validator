@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import './History.css'; // Import the CSS file
+import { useAptosWallet } from '../AptosWalletContext';
 
 const API_BASE_URL = import.meta.env.VITE_BACKEND_API;
-const CURRENT_USER_ADDRESS = '0x423e7753ca68849d0f3fd592bd82b76e9e046b54a59fe982b639ff03fd2009d2'; // Replace with dynamic user address
 
 function History() {
   const [userHistory, setUserHistory] = useState([]);
   const [allHistory, setAllHistory] = useState([]);
 
+  const { account } = useAptosWallet();
+
+const CURRENT_USER_ADDRESS = account ? account?.address : '0x65929a3b7e7858160eee81241b865f72539d32baaa4625c0edf30d2513ea7c4c'; // Replace with dynamic user address
+
+
   useEffect(() => {
     fetch(`${API_BASE_URL}/mint-history`)
       .then((response) => response.json())
       .then((data) => {
-        setAllHistory(data);
-        setUserHistory(data.filter((entry) => entry.creator_address === CURRENT_USER_ADDRESS));
+        setAllHistory(data.mint_history);
+        setUserHistory(data.mint_history.filter((entry) => entry.creator_address === CURRENT_USER_ADDRESS));
       })
       .catch((error) => console.error('Error fetching history:', error));
   }, []);
@@ -35,7 +40,7 @@ function History() {
           </tr>
         </thead>
         <tbody>
-          {userHistory.map((entry) => (
+          {userHistory?.map((entry) => (
             <tr key={entry.id}>
               <td>{entry.name}</td>
               <td>{entry.description}</td>
@@ -75,7 +80,7 @@ function History() {
           </tr>
         </thead>
         <tbody>
-          {allHistory.map((entry) => (
+          {allHistory?.map((entry) => (
             <tr key={entry.id}>
               <td>{entry.name}</td>
               <td>{entry.description}</td>

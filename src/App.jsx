@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Header from './components/Header';
@@ -7,6 +8,7 @@ import MintResultSection from './components/MintResultSection';
 import Leaderboard from './pages/Leaderboard';
 import History from './pages/History';
 import Stats from './pages/Stats'; // Import the Stats page
+import { useAptosWallet } from './AptosWalletContext';
 
 function App() {
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -14,6 +16,9 @@ function App() {
   const [mintResult, setMintResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [activeRoute, setActiveRoute] = useState('/'); // State to track active route
+  const [preview, setPreview] = useState(null);
+
+  const { account, isConnected, connectWallet, disconnectWallet } = useAptosWallet();
 
   const handleRouteChange = (route) => {
     setActiveRoute(route);
@@ -59,11 +64,14 @@ function App() {
             element={
               <div className="content">
                 <UploadSection
+                  uploadedImage={uploadedImage}
                   setUploadedImage={setUploadedImage}
                   setLoading={setLoading}
                   setAuthResult={setAuthResult}
+                  preview={preview}
+                  setPreview={setPreview}
                 />
-                {uploadedImage && (
+                {preview && (
                   <div className="result-container">
                     {(loading || authResult) && (
                       <ResultSection
@@ -75,7 +83,7 @@ function App() {
                         setMintResult={setMintResult}
                       />
                     )}
-                    {mintResult && <MintResultSection mintResult={mintResult} />}
+                    {preview && mintResult && <MintResultSection mintResult={mintResult} />}
                   </div>
                 )}
               </div>
