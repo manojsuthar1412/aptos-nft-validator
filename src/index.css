@@ -1,16 +1,45 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', sans-serif; /* Updated font */
   margin: 0;
   padding: 0;
-  background: #f4f4f9;
-  color: #333;
+  background: linear-gradient(to bottom, #6200ea, #3700b3);
+  background-attachment: fixed;
+  color: #e0e0e0; /* Softer foreground color */
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/src/assets/wave.svg') no-repeat center top;
+  background-size: cover;
+  z-index: -1;
 }
 
 .header {
   text-align: center;
   padding: 20px;
-  background: #6200ea;
-  color: white;
+  background: transparent;
+  color: #f5f5f5; /* Softer white for header text */
+  font-size: 2rem;
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 20px;
+  width: 80%;
+}
+.result-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .upload-section,
@@ -19,28 +48,93 @@ body {
   margin: 20px auto;
   padding: 20px;
   max-width: 600px;
-  background: white;
+  background: rgba(48, 48, 48, 0.9); /* Darker background for better contrast */
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
+  color: #e0e0e0; /* Softer text color */
 }
 
 .image-preview {
   margin-top: 10px;
   max-width: 100%;
-  border-radius: 8px;
+  border-radius: 8px; 
+  position: relative;
+  height: 400px;  
+  overflow: hidden;
 }
 
 button {
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s ease;
+  cursor: pointer;
+  border-radius: 4px;
+  border: none;
+  color: #e0e0e0; /* Softer button text color */
+  background: #6200ea;
+  padding: 10px 20px;
+}
+
+button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: left 0.3s ease;
+}
+
+button:hover::after {
+  left: 0;
+}
+
+button:hover {
+  background: #3700b3;
+}
+
+
+.upload-controls label {
+  display: inline-block;
   padding: 10px 20px;
   background: #6200ea;
-  color: white;
-  border: none;
+  color: #e0e0e0;
   border-radius: 4px;
   cursor: pointer;
   transition: background 0.3s ease;
 }
 
-button:hover {
+.upload-controls label:hover {
   background: #3700b3;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid #6200ea;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
 }

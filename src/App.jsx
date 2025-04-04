@@ -8,20 +8,35 @@ function App() {
   const [uploadedImage, setUploadedImage] = useState(null);
   const [authResult, setAuthResult] = useState(null);
   const [mintResult, setMintResult] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   return (
     <div className="app">
       <Header />
-      <UploadSection setUploadedImage={setUploadedImage} />   
-      {uploadedImage && (
-        <ResultSection
-          uploadedImage={uploadedImage}
+      <div className="content">    
+        <UploadSection 
+          setUploadedImage={setUploadedImage} 
+          setLoading={setLoading}
           setAuthResult={setAuthResult}
-          authResult={authResult}
-          setMintResult={setMintResult}
-        />
-      )}
-      {mintResult && <MintResultSection mintResult={mintResult} />}  
+        />  
+        {uploadedImage && (
+          <>
+            <div className="result-container"> 
+              {(loading || authResult) && (
+                <ResultSection
+                  loading={loading}
+                  setLoading={setLoading}
+                  uploadedImage={uploadedImage}
+                  setAuthResult={setAuthResult}
+                  authResult={authResult}
+                  setMintResult={setMintResult}
+                />
+              )}
+              {mintResult && <MintResultSection mintResult={mintResult} />}
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 }
