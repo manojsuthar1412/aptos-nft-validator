@@ -2,9 +2,9 @@ body {
   font-family: 'Roboto', sans-serif; /* Updated font */
   margin: 0;
   padding: 0;
-  background: linear-gradient(to bottom, #6200ea, #3700b3);
+  background: linear-gradient(to bottom, #1e293b, #0f172a); /* Updated gradient for a modern look */
   background-attachment: fixed;
-  color: #e0e0e0; /* Softer foreground color */
+  color: #f8fafc; /* Softer foreground color for better readability */
   overflow-x: hidden;
 }
 
@@ -18,14 +18,16 @@ body::before {
   background: url('/src/assets/wave.svg') no-repeat center top;
   background-size: cover;
   z-index: -1;
+  transform: scaleY(-1); /* Invert the wave vertically */
+  filter: blur(8px); /* Apply blur effect */
 }
 
 .header {
   text-align: center;
   padding: 20px;
   background: transparent;
-  color: #f5f5f5; /* Softer white for header text */
-  font-size: 2rem;
+  color: #e2e8f0; /* Softer white for header text */
+  font-size: 2.5rem; /* Slightly larger font size */
   animation: fadeIn 1.5s ease-in-out;
 }
 
@@ -48,11 +50,11 @@ body::before {
   margin: 20px auto;
   padding: 20px;
   max-width: 600px;
-  background: rgba(48, 48, 48, 0.9); /* Darker background for better contrast */
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: rgba(30, 41, 59, 0.9); /* Darker background for better contrast */
+  border-radius: 12px; /* Slightly larger border radius */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
   text-align: center;
-  color: #e0e0e0; /* Softer text color */
+  color: #f8fafc; /* Softer text color */
 }
 
 .image-preview {
@@ -67,13 +69,13 @@ body::before {
 button {
   position: relative;
   overflow: hidden;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 6px; /* Slightly larger border radius */
   border: none;
-  color: #e0e0e0; /* Softer button text color */
-  background: #6200ea;
-  padding: 10px 20px;
+  color: #f8fafc; /* Brighter button text color */
+  background: #3b82f6; /* Updated button color to vibrant blue */
+  padding: 12px 24px; /* Larger padding */
 }
 
 button::after {
@@ -92,22 +94,44 @@ button:hover::after {
 }
 
 button:hover {
-  background: #3700b3;
+  background: #2563eb; /* Darker blue hover color */
+  transform: scale(1.05); /* Slight scaling effect */
 }
 
+nav a {
+  display: inline-block;
+  padding: 12px 24px;
+  margin: 0 8px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #f8fafc; /* Match button text color */
+  background: rgba(30, 41, 59, 0.9); /* Match button background color */
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+nav a:hover {
+  background: #2563eb; /* Darker blue hover color */
+  transform: scale(1.05); /* Slight scaling effect */
+}
+
+nav a.active {
+  background: #1e40af; /* Even darker blue for active link */
+  font-weight: bold; /* Highlight active link with bold text */
+}
 
 .upload-controls label {
   display: inline-block;
-  padding: 10px 20px;
-  background: #6200ea;
-  color: #e0e0e0;
-  border-radius: 4px;
+  padding: 12px 24px;
+  background: #3b82f6; /* Updated label color to match buttons */
+  color: #f8fafc;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .upload-controls label:hover {
-  background: #3700b3;
+  background: #2563eb; /* Darker blue hover color */
+  transform: scale(1.05);
 }
 
 @keyframes fadeIn {
@@ -137,4 +161,55 @@ button:hover {
   width: 40px;
   height: 40px;
   animation: spin 1s linear infinite;
+}
+
+.leaderboard {
+  padding: 20px;
+  text-align: center;
+}
+
+.tab-menu {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.tab-menu button {
+  padding: 12px 24px;
+  margin: 0 8px;
+  border: none;
+  border-radius: 6px;
+  background: #414b60; /* Updated tab button color to vibrant blue */
+  color: #f8fafc;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.tab-menu button.active {
+  background: #3b82f6; /* Darker blue for active tab */
+}
+
+.tab-menu button:hover {
+  background: #2563eb;
+  transform: scale(1.05);
+}
+
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+  border: 1px solid #f8fafc;
+  padding: 12px;
+  text-align: center;
+  background: rgba(30, 41, 59, 0.8); /* Updated table cell background */
+  color: #f8fafc; /* Brighter text color */
+}
+
+.chart-container {
+  max-width: 600px;
+  margin: 0 auto;
 }
