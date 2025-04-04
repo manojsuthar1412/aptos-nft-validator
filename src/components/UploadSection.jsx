@@ -3,7 +3,7 @@ import './UploadSection.css';
 
 const API_BASE_URL = import.meta.env.VITE_BACKEND_API;
 
-function UploadSection({ setUploadedImage, setLoading, setAuthResult }) {
+function UploadSection({ uploadedImage, setUploadedImage, setLoading, setAuthResult }) {
   const [preview, setPreview] = useState(null);
 
   const handleFileChange = (e) => {
@@ -19,7 +19,7 @@ function UploadSection({ setUploadedImage, setLoading, setAuthResult }) {
   const checkAuthenticity = async () => {
     setLoading(true);
     const formData = new FormData();
-    formData.append('image', setUploadedImage);
+    formData.append('image', uploadedImage);
 
     try {
       const response = await fetch(`${API_BASE_URL}/validate-image`, {
