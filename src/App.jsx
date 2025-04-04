@@ -6,6 +6,7 @@ import ResultSection from './components/ResultSection';
 import MintResultSection from './components/MintResultSection';
 import Leaderboard from './pages/Leaderboard';
 import History from './pages/History';
+import Stats from './pages/Stats'; // Import the Stats page
 
 function App() {
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -44,6 +45,13 @@ function App() {
           >
             History
           </Link>
+          <Link
+            to="/stats"
+            className={activeRoute === '/stats' ? 'active' : ''}
+            onClick={() => handleRouteChange('/stats')}
+          >
+            Stats
+          </Link>
         </nav>
         <Routes>
           <Route
@@ -75,6 +83,7 @@ function App() {
           />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/history" element={<History />} />
+          <Route path="/stats" element={<Stats />} />
         </Routes>
       </div>
     </Router>
