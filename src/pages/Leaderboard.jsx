@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
 
-const leaderboardData = [
-  { rank: 1, address: '0x123...abc', minted: 50 },
-  { rank: 2, address: '0x456...def', minted: 30 },
-  { rank: 3, address: '0x789...ghi', minted: 20 },
-];
+const API_BASE_URL = import.meta.env.VITE_BACKEND_API;
 
 function Leaderboard() {
+  const [leaderboardData, setLeaderboardData] = useState([]);
   const [activeTab, setActiveTab] = useState('Table');
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/leaderboard`)
+      .then((response) => response.json())
+      .then((data) => setLeaderboardData(data))
+      .catch((error) => console.error('Error fetching leaderboard:', error));
+  }, []);
 
   const chartData = {
     labels: leaderboardData.map((entry) => entry.address),
@@ -17,9 +21,9 @@ function Leaderboard() {
       {
         label: 'Minted Tokens',
         data: leaderboardData.map((entry) => entry.minted),
-        backgroundColor: ['#4caf50', '#2196f3', '#ff9800'], // Green, blue, and orange
-        borderColor: ['#388e3c', '#1976d2', '#f57c00'], // Slightly darker shades for borders
-        borderWidth: 2, // Added border for better visibility
+        backgroundColor: ['#4caf50', '#2196f3', '#ff9800'],
+        borderColor: ['#388e3c', '#1976d2', '#f57c00'],
+        borderWidth: 2,
       },
     ],
   };
@@ -50,9 +54,9 @@ function Leaderboard() {
             </tr>
           </thead>
           <tbody>
-            {leaderboardData.map((entry) => (
-              <tr key={entry.rank}>
-                <td>{entry.rank}</td>
+            {leaderboardData.map((entry, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
                 <td>{entry.address}</td>
                 <td>{entry.minted}</td>
               </tr>

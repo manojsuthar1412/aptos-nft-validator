@@ -1,15 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
 
-const statsData = {
-  total_uploads: 13,
-  total_valid_mints: 2,
-  total_rejected: 10,
-  average_score: 1.3871,
-};
+const API_BASE_URL = import.meta.env.VITE_BACKEND_API;
 
 function Stats() {
+  const [statsData, setStatsData] = useState({
+    total_uploads: 0,
+    total_valid_mints: 0,
+    total_rejected: 0,
+    average_score: 0,
+  });
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/stats`)
+      .then((response) => response.json())
+      .then((data) => setStatsData(data))
+      .catch((error) => console.error('Error fetching stats:', error));
+  }, []);
+
   const chartData = {
     labels: ['Valid Mints', 'Rejected'],
     datasets: [
