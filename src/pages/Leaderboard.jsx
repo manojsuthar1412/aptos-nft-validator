@@ -78,7 +78,9 @@ function Leaderboard() {
               <tbody>
                 {leaderboardData?.map((entry, index) => (
                   <tr key={index}>
-                    <td>{index + 1}</td>
+                    <td>
+                      {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : index + 1}
+                    </td>
                     <td>{entry.creator_address}</td>
                     <td>{entry.mint_count}</td>
                   </tr>
