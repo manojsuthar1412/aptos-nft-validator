@@ -45,43 +45,52 @@ function Leaderboard() {
 
   return (
     <div className="leaderboard">
-      <div className="tab-menu">
-        <button
-          className={activeTab === 'Table' ? 'active' : ''}
-          onClick={() => setActiveTab('Table')}
-        >
-          Table
-        </button>
-        <button
-          className={activeTab === 'Chart' ? 'active' : ''}
-          onClick={() => setActiveTab('Chart')}
-        >
-          Chart
-        </button>
-      </div>
-      {activeTab === 'Table' ? (
-        <table className="leaderboard-table">
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Address</th>
-              <th>Minted Tokens</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leaderboardData?.map((entry, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{entry.creator_address}</td>
-                <td>{entry.mint_count}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <div className="chart-container">
-          <Pie data={chartData} />
+      {leaderboardData.length === 0 ? (
+        <div style={{ textAlign: 'center', color: '#94a3b8' }}>
+          <p>Loading leaderboard...</p>
+          <div className="loading-spinner"></div>
         </div>
+      ) : (
+        <>
+          <div className="tab-menu">
+            <button
+              className={activeTab === 'Table' ? 'active' : ''}
+              onClick={() => setActiveTab('Table')}
+            >
+              Table
+            </button>
+            <button
+              className={activeTab === 'Chart' ? 'active' : ''}
+              onClick={() => setActiveTab('Chart')}
+            >
+              Chart
+            </button>
+          </div>
+          {activeTab === 'Table' ? (
+            <table className="leaderboard-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Address</th>
+                  <th>Minted Tokens</th>
+                </tr>
+              </thead>
+              <tbody>
+                {leaderboardData?.map((entry, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{entry.creator_address}</td>
+                    <td>{entry.mint_count}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className="chart-container">
+              <Pie data={chartData} />
+            </div>
+          )}
+        </>
       )}
     </div>
   );

@@ -49,20 +49,29 @@ function Stats() {
 
   return (
     <div className="stats">
-      <h2 style={{ textAlign: 'center', marginBottom: '20px', color: '#f8fafc' }}>Project Stats</h2>
-      <div className="stats-cards" style={{ display: 'flex', justifyContent: 'space-around', marginBottom: '40px' }}>
-        <div className="card" style={{ background: '#1e293b', padding: '20px', borderRadius: '8px', textAlign: 'center', color: '#f8fafc' }}>
-          <h3>Total Uploads</h3>
-          <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{statsData.total_uploads}</p>
+      {statsData.total_uploads === 0 && statsData.total_valid_mints === 0 && statsData.total_rejected === 0 ? (
+        <div style={{ textAlign: 'center', color: '#94a3b8' }}>
+          <p>Loading stats...</p>
+          <div className="loading-spinner"></div>
         </div>
-        <div className="card" style={{ background: '#1e293b', padding: '20px', borderRadius: '8px', textAlign: 'center', color: '#f8fafc' }}>
-          <h3>Average Score</h3>
-          <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{statsData.average_score.toFixed(4)}</p>
-        </div>
-      </div>
-      <div className="chart-container" style={{ maxWidth: '600px', margin: '0 auto' }}>
-        <Pie data={chartData} />
-      </div>
+      ) : (
+        <>
+          <h2 style={{ textAlign: 'center', marginBottom: '20px', color: '#f8fafc' }}>Project Stats</h2>
+          <div className="stats-cards" style={{ display: 'flex', justifyContent: 'space-around', marginBottom: '40px' }}>
+            <div className="card" style={{ background: '#1e293b', padding: '20px', borderRadius: '8px', textAlign: 'center', color: '#f8fafc' }}>
+              <h3>Total Uploads</h3>
+              <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{statsData.total_uploads}</p>
+            </div>
+            <div className="card" style={{ background: '#1e293b', padding: '20px', borderRadius: '8px', textAlign: 'center', color: '#f8fafc' }}>
+              <h3>Average Score</h3>
+              <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{statsData.average_score.toFixed(4)}</p>
+            </div>
+          </div>
+          <div className="chart-container" style={{ maxWidth: '600px', margin: '0 auto' }}>
+            <Pie data={chartData} />
+          </div>
+        </>
+      )}
     </div>
   );
 }
