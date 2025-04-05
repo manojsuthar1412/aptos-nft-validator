@@ -6,9 +6,9 @@ function MintResultSection({ mintResult }) {
       {mintResult?.status == 'success' ? (
         <>
           <p>Minting Successful!</p>
-          <p>Transaction Hash: {mintResult.txn_hash}</p>
+          <p>Transaction Hash: {mintResult.transaction_hash}</p>
           <a
-            href={`https://explorer.aptoslabs.com/txn/${mintResult.txn_hash}?network=devnet`}
+            href={`https://explorer.aptoslabs.com/txn/${mintResult.transaction_hash}?network=devnet`}
             target="_blank"
             rel="noopener noreferrer"
           >
