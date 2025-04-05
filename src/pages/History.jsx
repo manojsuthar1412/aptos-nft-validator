@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './History.css'; // Import the CSS file
 import { useAptosWallet } from '../AptosWalletContext';
 
@@ -7,6 +7,7 @@ const API_BASE_URL = import.meta.env.VITE_BACKEND_API;
 function History() {
   const [userHistory, setUserHistory] = useState([]);
   const [allHistory, setAllHistory] = useState([]);
+  const abortControllerRef = useRef(null); // Ref to store the AbortController
 
   const { account } = useAptosWallet();
 
@@ -14,13 +15,27 @@ const CURRENT_USER_ADDRESS = account ? account?.address : '0x65929a3b7e7858160ee
 
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/mint-history`)
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort(); // Cancel the previous request
+    }
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+
+    fetch(`${API_BASE_URL}/mint-history`, { signal: abortController.signal })
       .then((response) => response.json())
       .then((data) => {
         setAllHistory(data.mint_history);
         setUserHistory(data.mint_history.filter((entry) => entry.creator_address === CURRENT_USER_ADDRESS));
       })
-      .catch((error) => console.error('Error fetching history:', error));
+      .catch((error) => {
+        if (error.name === 'AbortError') {
+          console.log('Previous request canceled');
+        } else {
+          console.error('Error fetching history:', error);
+        }
+      });
+
+    return () => abortController.abort(); // Cleanup on unmount
   }, []);
 
   return (

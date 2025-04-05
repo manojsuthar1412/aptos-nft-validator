@@ -1,0 +1,18 @@
+.form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.form-label {
+  margin-right: 10px;
+  font-weight: bold;
+  min-width: 80px;
+}
+
+.form-input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}

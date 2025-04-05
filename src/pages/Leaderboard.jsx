@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
 
@@ -7,12 +7,27 @@ const API_BASE_URL = import.meta.env.VITE_BACKEND_API;
 function Leaderboard() {
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [activeTab, setActiveTab] = useState('Table');
+  const abortControllerRef = useRef(null); // Ref to store the AbortController
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/leaderboard`)
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort(); // Cancel the previous request
+    }
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+
+    fetch(`${API_BASE_URL}/leaderboard`, { signal: abortController.signal })
       .then((response) => response.json())
       .then((data) => setLeaderboardData(data.leaderboard))
-      .catch((error) => console.error('Error fetching leaderboard:', error));
+      .catch((error) => {
+        if (error.name === 'AbortError') {
+          console.log('Previous request canceled');
+        } else {
+          console.error('Error fetching leaderboard:', error);
+        }
+      });
+
+    return () => abortController.abort(); // Cleanup on unmount
   }, []);
 
   const chartData = leaderboardData?.length > 0 && {

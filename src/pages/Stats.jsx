@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
 
@@ -12,11 +12,27 @@ function Stats() {
     average_score: 0,
   });
 
+  const abortControllerRef = useRef(null); // Ref to store the AbortController
+
   useEffect(() => {
-    fetch(`${API_BASE_URL}/stats`)
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort(); // Cancel the previous request
+    }
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+
+    fetch(`${API_BASE_URL}/stats`, { signal: abortController.signal })
       .then((response) => response.json())
       .then((data) => setStatsData(data))
-      .catch((error) => console.error('Error fetching stats:', error));
+      .catch((error) => {
+        if (error.name === 'AbortError') {
+          console.log('Previous request canceled');
+        } else {
+          console.error('Error fetching stats:', error);
+        }
+      });
+
+    return () => abortController.abort(); // Cleanup on unmount
   }, []);
 
   const chartData = {

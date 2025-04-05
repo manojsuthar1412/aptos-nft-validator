@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useAptosWallet } from '../AptosWalletContext';
+import './ResultSection.css'; // Import the CSS file
 const API_BASE_URL = import.meta.env.VITE_BACKEND_API;
-
 
 function ResultSection({ loading, setLoading, authResult, setMintResult }) {
 
@@ -10,6 +10,7 @@ function ResultSection({ loading, setLoading, authResult, setMintResult }) {
     name: '',
     description: ''
   })
+  const abortControllerRef = useRef(null); // Ref to store the AbortController
   const loadingMessages = [
     "Booting up AI guardians...",
     "Analyzing image authenticity...",
@@ -32,6 +33,18 @@ function ResultSection({ loading, setLoading, authResult, setMintResult }) {
     "Finalizing AI verification...",
     "Securing your digital asset..."
   ];
+  const [currentLoadingMessage, setCurrentLoadingMessage] = useState('');
+
+  useEffect(() => {
+    let intervalId;
+    if (loading) {
+      intervalId = setInterval(() => {
+        const randomIndex = Math.floor(Math.random() * loadingMessages.length);
+        setCurrentLoadingMessage(loadingMessages[randomIndex]);
+      }, 1000);
+    }
+    return () => clearInterval(intervalId); // Cleanup interval on unmount or when loading stops
+  }, [loading]);
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
@@ -42,6 +55,12 @@ function ResultSection({ loading, setLoading, authResult, setMintResult }) {
   }
 
   const mintNFT = async() => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort(); // Cancel the previous request
+    }
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+
     setLoading(true);
     const formData = new FormData();
     formData.append('receiver_address', account?.address);
@@ -55,22 +74,22 @@ function ResultSection({ loading, setLoading, authResult, setMintResult }) {
       const response = await fetch(`${API_BASE_URL}/mint-nft`, {
         method: 'POST',
         body: formData,
+        signal: abortController.signal, // Attach the signal
       });
       const result = await response.json();
       setMintResult(result);
     } catch (error) {
-      console.error('Error validating image:', error);
-      setMintResult({status: 'error', reason: 'Error validating image'});
+      if (error.name === 'AbortError') {
+        console.log('Previous request canceled');
+      } else {
+        console.error('Error validating image:', error);
+        setMintResult({status: 'error', reason: 'Error validating image'});
+      }
     } finally {
       setLoading(false);
     }
 
   };
-
-  const loadHelperMsg = () => {
-    const randomIndex = Math.floor(Math.random() * loadingMessages.length);
-    return loadingMessages[randomIndex];
-  }
   
 
   return (
@@ -78,7 +97,7 @@ function ResultSection({ loading, setLoading, authResult, setMintResult }) {
       {loading ? (
         <>
           <div className="loading-spinner"></div>
-          <span>{loadHelperMsg()}</span>
+          <span>{currentLoadingMessage}</span>
         </>
       ) : authResult ? (
         authResult.status == 'valid' ? (
@@ -86,10 +105,26 @@ function ResultSection({ loading, setLoading, authResult, setMintResult }) {
             <p>Ready to Mint</p>
             <p>Label: {authResult.label}</p>
             <p>Score: {authResult.score*100}%</p>
-            <input type="text" name="name" onChange={handleFormChange} />
-            <label htmlFor="name">Name</label>
-            <input type="text" name="description" onChange={handleFormChange}  />
-            <label htmlFor="description">description</label>
+            <div className="form-group">
+              <label htmlFor="name" className="form-label">Name</label>
+              <input
+                type="text"
+                name="name"
+                placeholder="Enter NFT Name"
+                onChange={handleFormChange}
+                className="form-input"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="description" className="form-label">Description</label>
+              <input
+                type="text"
+                name="description"
+                placeholder="Enter NFT Description"
+                onChange={handleFormChange}
+                className="form-input"
+              />
+            </div>
             {isConnected ? (
               <button onClick={mintNFT}>Mint on Aptos</button>
             ) : (
