@@ -9,6 +9,7 @@ function MintResultSection({ mintResult }) {
           <p>Transaction Hash: {mintResult.txn_hash}</p>
           <a
             href={`https://explorer.aptoslabs.com/txn/${mintResult.txn_hash}?network=devnet`}
+            
             target="_blank"
             rel="noopener noreferrer"
           >
