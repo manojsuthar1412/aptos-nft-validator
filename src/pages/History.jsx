@@ -69,7 +69,7 @@ const CURRENT_USER_ADDRESS = account ? account?.address : '0x65929a3b7e7858160ee
                   <td style={{ wordBreak: 'break-word' }}>{entry.creator_address}</td>
                   <td style={{ wordBreak: 'break-word' }}>
                     <a
-                      href={`https://explorer.aptos.dev/txn/${entry.txn_hash}`}
+                      href={`https://explorer.aptoslabs.com/txn/${entry.txn_hash}?network=devnet`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -109,7 +109,7 @@ const CURRENT_USER_ADDRESS = account ? account?.address : '0x65929a3b7e7858160ee
                   <td style={{ wordBreak: 'break-word' }}>{entry.creator_address}</td>
                   <td style={{ wordBreak: 'break-word' }}>
                     <a
-                      href={`https://explorer.aptos.dev/txn/${entry.txn_hash}`}
+                      href={`https://explorer.aptoslabs.com/txn/${entry.txn_hash}?network=devnet`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
