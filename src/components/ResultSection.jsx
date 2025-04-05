@@ -3,7 +3,7 @@ import { useAptosWallet } from '../AptosWalletContext';
 import './ResultSection.css'; // Import the CSS file
 const API_BASE_URL = import.meta.env.VITE_BACKEND_API;
 
-function ResultSection({ loading, setLoading, authResult, setMintResult }) {
+function ResultSection({ loading, setLoading, authResult, setMintResult, setAuthResult }) {
 
   const { account, isConnected, connectWallet} = useAptosWallet();
   const [mintPayload, setMintPayload] = useState({
@@ -78,6 +78,9 @@ function ResultSection({ loading, setLoading, authResult, setMintResult }) {
       });
       const result = await response.json();
       setMintResult(result);
+      if (result.status === 'success') {
+        setAuthResult(null); // Clear authResult on successful mint
+      }
     } catch (error) {
       if (error.name === 'AbortError') {
         console.log('Previous request canceled');
